@@ -1,6 +1,6 @@
 # Manga Translation Site
 
-# Why
-# Technologies
-# Deployment and hosting
-# Author
+## Why
+## Technologies
+## Deployment and hosting
+## Author
