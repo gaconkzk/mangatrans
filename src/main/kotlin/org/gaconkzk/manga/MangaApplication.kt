@@ -1,11 +1,13 @@
 package org.gaconkzk.manga
 
-import org.springframework.boot.SpringApplication
+import org.gaconkzk.manga.util.run
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 @SpringBootApplication
+@EnableConfigurationProperties(MangaProperties::class)
 class MangaApplication
 
 fun main(args: Array<String>) {
-    SpringApplication.run(MangaApplication::class.java, *args)
+    run(MangaApplication::class, *args)
 }

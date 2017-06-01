@@ -2,6 +2,7 @@ buildscript {
     ext {
         kotlinVersion = '1.1.2-2'
         springBootVersion = '2.0.0.M1'
+        kotlinExtensionsVersion = '1.0.0.M2'
         cassandraVersion = '3.2.0'
     }
     repositories {
@@ -44,6 +45,8 @@ dependencies {
 //    compile('org.springframework.boot:spring-boot-starter-undertow')
     compile("org.jetbrains.kotlin:kotlin-stdlib-jre8:${kotlinVersion}")
     compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
+
+    compile("io.projectreactor:reactor-kotlin-extensions:${kotlinExtensionsVersion}")
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
