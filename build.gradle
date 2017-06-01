@@ -39,9 +39,9 @@ repositories {
 
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-data-cassandra-reactive')
+//    compile('org.springframework.boot:spring-boot-starter-data-cassandra-reactive')
     compile('org.springframework.boot:spring-boot-starter-webflux')
-    compile('org.springframework.boot:spring-boot-starter-undertow')
+//    compile('org.springframework.boot:spring-boot-starter-undertow')
     compile("org.jetbrains.kotlin:kotlin-stdlib-jre8:${kotlinVersion}")
     compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
 
