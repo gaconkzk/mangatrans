@@ -11,5 +11,6 @@ import org.springframework.web.reactive.function.server.body
  */
 @Component
 class MangaHandler(val mangarepo: MangaRepository) {
-    fun all(req: ServerRequest) = ok().body(mangarepo.findAll())
+    fun all(req: ServerRequest) = ok().header("Access-Control-Allow-Origin", "*").body(mangarepo
+            .findAll())
 }
