@@ -21,5 +21,8 @@ fun run(type: KClass<*>, vararg args: String) = SpringApplication.run(type.java,
 inline fun <reified T : Any> ReactiveMongoOperations.count(): Mono<Long> =
         count(Query(), T::class.java)
 
+inline fun <reified T : Any> ReactiveMongoOperations.drop(): Mono<Void> =
+        dropCollection(T::class.java)
+
 inline fun <reified T : Any> ReactiveMongoOperations.findAll(): Flux<T> =
         findAll(T::class.java)

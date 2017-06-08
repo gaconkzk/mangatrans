@@ -7,5 +7,14 @@
     "volumes": 22,
     "chapters": 1221,
     "lang": "japanese"
+  },
+  {
+    "id": "2",
+    "name": "Onepiece",
+    "author": "xxx",
+    "status": "in-completed",
+    "volumes": 600,
+    "chapters": 3221,
+    "lang": "japanese"
   }
 ]
