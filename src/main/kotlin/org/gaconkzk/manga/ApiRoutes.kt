@@ -17,6 +17,10 @@ class ApiRoutes(val mangaHandler: MangaHandler) {
             "/mangas".nest {
                 GET("/", mangaHandler::all)
             }
+
+            "/img".nest {
+                GET("/", mangaHandler::img)
+            }
         }
     }
 }

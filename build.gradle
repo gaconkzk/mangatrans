@@ -3,6 +3,7 @@ buildscript {
         kotlinVersion = '1.1.2-2'
         springBootVersion = '2.0.0.M1'
         kotlinExtensionsVersion = '1.0.0.M2'
+        minioVersion = '3.0.4'
     }
     repositories {
         mavenCentral()
@@ -54,6 +55,8 @@ dependencies {
 
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+
+    compile("io.minio:minio:${minioVersion}")
 
     compile("io.projectreactor:reactor-kotlin-extensions:${kotlinExtensionsVersion}")
 

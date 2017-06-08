@@ -3,6 +3,7 @@ package org.gaconkzk.manga.util
 import org.springframework.boot.SpringApplication
 import org.springframework.data.mongodb.core.ReactiveMongoOperations
 import org.springframework.data.mongodb.core.query.Query
+import org.springframework.http.MediaType
 import org.springframework.web.reactive.function.server.ServerResponse
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -32,3 +33,4 @@ inline fun <reified T : Any> ReactiveMongoOperations.findAll(): Flux<T> =
 // Spring WebFlux extensions
 // -------------------------
 fun ServerResponse.BodyBuilder.disableCors() = header("Access-Control-Allow-Origin", "*")
+fun ServerResponse.BodyBuilder.image() = contentType(MediaType.IMAGE_JPEG)
