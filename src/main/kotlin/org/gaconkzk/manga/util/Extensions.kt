@@ -3,6 +3,7 @@ package org.gaconkzk.manga.util
 import org.springframework.boot.SpringApplication
 import org.springframework.data.mongodb.core.ReactiveMongoOperations
 import org.springframework.data.mongodb.core.query.Query
+import org.springframework.web.reactive.function.server.ServerResponse
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import kotlin.reflect.KClass
@@ -26,3 +27,8 @@ inline fun <reified T : Any> ReactiveMongoOperations.drop(): Mono<Void> =
 
 inline fun <reified T : Any> ReactiveMongoOperations.findAll(): Flux<T> =
         findAll(T::class.java)
+
+// -------------------------
+// Spring WebFlux extensions
+// -------------------------
+fun ServerResponse.BodyBuilder.disableCors() = header("Access-Control-Allow-Origin", "*")
