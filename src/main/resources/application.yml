@@ -1,2 +1,5 @@
 server.port: 9001
 
+logging.level.root: INFO
+spring.data.mongodb.repositories.enabled: false
+

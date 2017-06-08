@@ -14,8 +14,8 @@ class ApiRoutes(val mangaHandler: MangaHandler) {
     @Bean
     fun apiRouter() = router {
         (accept(APPLICATION_JSON) and "/api").nest {
-            "/manga".nest {
-                GET("/", mangaHandler::hello)
+            "/mangas".nest {
+                GET("/", mangaHandler::all)
             }
         }
     }

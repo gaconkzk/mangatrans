@@ -1,4 +1,4 @@
-package org.gaconkzk.manga.book
+package org.gaconkzk.manga.domain
 
 /**
  *

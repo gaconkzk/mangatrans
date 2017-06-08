@@ -3,7 +3,6 @@ buildscript {
         kotlinVersion = '1.1.2-2'
         springBootVersion = '2.0.0.M1'
         kotlinExtensionsVersion = '1.0.0.M2'
-        cassandraVersion = '3.2.0'
     }
     repositories {
         mavenCentral()
@@ -18,7 +17,8 @@ buildscript {
 }
 
 apply plugin: 'kotlin'
-apply plugin: 'kotlin-spring'
+apply plugin: 'org.jetbrains.kotlin.plugin.spring'
+apply plugin: 'org.jetbrains.kotlin.jvm'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
@@ -40,13 +40,24 @@ repositories {
 
 
 dependencies {
-//    compile('org.springframework.boot:spring-boot-starter-data-cassandra-reactive')
-    compile('org.springframework.boot:spring-boot-starter-webflux')
-//    compile('org.springframework.boot:spring-boot-starter-undertow')
+    compile("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
+    compile('org.springframework.boot:spring-boot-starter-webflux') {
+        exclude module: 'spring-boot-starter-reactor-netty'
+        exclude module: 'hibernate-validator'
+    }
+
+    compileOnly("org.springframework:spring-context-indexer")
+
+    compile('org.springframework.boot:spring-boot-starter-undertow')
     compile("org.jetbrains.kotlin:kotlin-stdlib-jre8:${kotlinVersion}")
     compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
 
+    compile("com.fasterxml.jackson.module:jackson-module-kotlin")
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+
     compile("io.projectreactor:reactor-kotlin-extensions:${kotlinExtensionsVersion}")
+
+//    runtime("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
