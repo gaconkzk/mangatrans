@@ -20,10 +20,11 @@ class MangaRepository(val template: ReactiveMongoTemplate, val objectMapper: Obj
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
     fun initData() {
+        drop().block()
         if (count().block() == 0L) {
             val mangasResource = ClassPathResource("data/mangas.json")
             val mangas: List<Manga> = objectMapper.readValue(mangasResource.inputStream)
-            mangas.forEach { save(it).block() }
+            save(mangas).subscribe()
             logger.info("Mangas data initialization completed")
         }
     }
@@ -35,6 +36,8 @@ class MangaRepository(val template: ReactiveMongoTemplate, val objectMapper: Obj
     fun save(manga: Manga) = template.save(manga)
 
     fun save(manga: Mono<Manga>) = template.save(manga)
+
+    fun save(mangas: List<Manga>) = template.insertAll(mangas)
 
     fun findAll() = template.findAll<Manga>()
 }
