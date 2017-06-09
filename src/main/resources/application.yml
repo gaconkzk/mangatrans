@@ -5,5 +5,5 @@ spring.data.mongodb.repositories.enabled: false
 
 minio:
   url: http://localhost:9000
-  accessKey: XKKFVGCNND21RLDCEFFI
-  secretKey: 0B0VFZ28GvjQunfzC8jPQo1W1xr3YitYN+1SPXfC
+  accessKey: 7KEF5L0440Q9ZDM4YZBH
+  secretKey: rPJMWCqeuuIKTmktINBKj9PD39luywmITqf/03wz

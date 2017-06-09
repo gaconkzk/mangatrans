@@ -1,20 +1,15 @@
 [
   {
     "id": "1",
-    "name": "Offside",
-    "author": "xxx",
+    "name": "offside",
     "status": "completed",
     "volumes": 22,
-    "chapters": 1221,
     "lang": "japanese"
   },
   {
     "id": "2",
-    "name": "Onepiece",
-    "author": "xxx",
+    "name": "onepiece",
     "status": "in-completed",
-    "volumes": 600,
-    "chapters": 3221,
     "lang": "japanese"
   }
 ]
