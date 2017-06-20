@@ -3,8 +3,9 @@ import org.gradle.internal.os.OperatingSystem
 
 buildscript {
     ext {
+        kotlinVersion = '1.1.2-5'
         springBootVersion = '2.0.0.M2'
-        springCloudVersion = 'Dalston.SR1'
+        springCloudVersion = 'Finchley.BUILD-SNAPSHOT'
         sonarqubeVersion = '2.5'
         gradleAptVersion = '0.10'
         propdepsVersion = '0.0.9.RELEASE'
@@ -44,13 +45,23 @@ buildscript {
         classpath "io.spring" +
                 ".gradle:dependency-management-plugin:${springDependencyManagementVersion}"
         classpath "com.moowork.gradle:gradle-node-plugin:${nodePluginVersion}"
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
 }
 
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-spring'
 apply plugin: 'java'
 sourceCompatibility=1.8
 targetCompatibility=1.8
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
 apply plugin: 'maven'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'war'
@@ -165,7 +176,10 @@ dependencyManagement {
 }
 
 dependencies {
-    compile "io.github.jhipster:jhipster:${jhipsterServerVersion}"
+    compile("org.jetbrains.kotlin:kotlin-stdlib-jre8:${kotlinVersion}")
+    compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
+
+//    compile "io.github.jhipster:jhipster:${jhipsterServerVersion}"
     compile "io.dropwizard.metrics:metrics-core:${dropwizardMetricsVersion}"
     compile "io.dropwizard.metrics:metrics-annotation:${dropwizardMetricsVersion}"
     compile "io.dropwizard.metrics:metrics-json:${dropwizardMetricsVersion}"

@@ -21,8 +21,8 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
-import org.theflies.discovery.config.ApplicationProperties;
 import org.theflies.discovery.config.DefaultProfileUtil;
+import org.theflies.discovery.config.TheFliesProperties;
 
 /**
  *
@@ -33,7 +33,7 @@ import org.theflies.discovery.config.DefaultProfileUtil;
 @ComponentScan
 @EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class,
     MetricRepositoryAutoConfiguration.class, MetricsDropwizardAutoConfiguration.class})
-@EnableConfigurationProperties({ApplicationProperties.class})
+@EnableConfigurationProperties({TheFliesProperties.class})
 @EnableDiscoveryClient
 @EnableZuulProxy
 public class Application {
