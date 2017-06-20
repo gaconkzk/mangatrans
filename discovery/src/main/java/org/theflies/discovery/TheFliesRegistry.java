@@ -36,13 +36,13 @@ import org.theflies.discovery.config.TheFliesProperties;
 @EnableConfigurationProperties({TheFliesProperties.class})
 @EnableDiscoveryClient
 @EnableZuulProxy
-public class Application {
+public class TheFliesRegistry {
 
-  private static final Logger log = LoggerFactory.getLogger(Application.class);
+  private static final Logger log = LoggerFactory.getLogger(TheFliesRegistry.class);
 
   private final Environment env;
 
-  public Application(Environment env) {
+  public TheFliesRegistry(Environment env) {
     this.env = env;
   }
 
@@ -73,7 +73,7 @@ public class Application {
    * @throws UnknownHostException if the local host name could not be resolved into an address
    */
   public static void main(String[] args) throws UnknownHostException {
-    SpringApplication app = new SpringApplication(Application.class);
+    SpringApplication app = new SpringApplication(TheFliesRegistry.class);
     DefaultProfileUtil.addDefaultProfile(app);
     Environment env = app.run(args).getEnvironment();
     String protocol = "http";

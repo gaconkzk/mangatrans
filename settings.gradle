@@ -1,2 +1,2 @@
-include ":manga", ":catalog", ":config", ":discovery"
+include ":manga", ":catalog", ":discovery"
 include ":edge", ":hystrix-dashboard", ":inventory", ":web", "user"
