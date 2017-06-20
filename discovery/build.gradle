@@ -1,24 +1,161 @@
+import groovy.json.JsonSlurper
+import org.gradle.internal.os.OperatingSystem
+
 buildscript {
     ext {
-        springBootVersion = '2.0.0.M1'
+        springBootVersion = '2.0.0.M2'
         springCloudVersion = 'Dalston.SR1'
+        sonarqubeVersion = '2.5'
+        gradleAptVersion = '0.10'
+        propdepsVersion = '0.0.9.RELEASE'
+        springDependencyManagementVersion = '1.0.3.RELEASE'
+        mapstructVersion = '1.1.0.Final'
+        nodePluginVersion = '1.2.0'
+        jhipsterServerVersion = '1.1.5'
+        nodeVersion = '6.11.0'
+        npmVersion = '3.10.10'
+        yarnVersion = '0.24.6'
+        dropwizardMetricsVersion = '3.2.2'
+        metricsSpringVersion = '3.1.3'
+        commonsCodecVersion = '1.10'
+        commonsIoVersion = '2.5'
+        commonsLangVersion = '3.5'
+        mapstructVersion = '1.1.0.Final'
+        lz4Version = '1.3.0'
+        logstashLogbackEncoderVersion = '4.9'
+        assertjVersion = '3.6.2'
+        springfoxVersion = '2.6.1'
+        jjwtVersion = '0.7.0'
+        awaitilityVersion = '2.0.0'
     }
     repositories {
+        mavenLocal()
+        mavenCentral()
         jcenter()
-        maven { url 'https://repo.spring.io/libs-milestone' }
+        maven { url "http://repo.spring.io/plugins-release" }
+        maven { url "http://repo.spring.io/milestone" }
+        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${sonarqubeVersion}"
+        classpath "net.ltgt.gradle:gradle-apt-plugin:${gradleAptVersion}"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath "io.spring.gradle:propdeps-plugin:${propdepsVersion}"
+        classpath "io.spring" +
+                ".gradle:dependency-management-plugin:${springDependencyManagementVersion}"
+        classpath "com.moowork.gradle:gradle-node-plugin:${nodePluginVersion}"
+        //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
 }
 
 apply plugin: 'java'
+sourceCompatibility=1.8
+targetCompatibility=1.8
+apply plugin: 'maven'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'war'
+apply plugin: 'propdeps'
 apply plugin: 'io.spring.dependency-management'
+/* downgrade Hibernate to 4.3 */
+ext['hibernate.version'] = '${hibernate_entitymanager_version}'
+defaultTasks 'bootRun'
+
+bootJar {
+    mainClass = "org.theflies.discovery.Application"
+}
+
+war {
+
+}
+
+springBoot {
+    buildInfo()
+}
+
+if (OperatingSystem.current().isWindows()) {
+    task pathingJar(type: Jar) {
+        dependsOn configurations.runtime
+        appendix = 'pathing'
+
+        doFirst {
+            manifest {
+                attributes 'Class-Path': configurations.runtime.files.collect {
+                    it.toURL().toString().replaceFirst(/file:\/+/, '/').replaceAll(' ', '%20')
+                }.join(' ')
+            }
+        }
+    }
+
+    bootRun {
+        dependsOn pathingJar
+        doFirst {
+            classpath = files("$buildDir/classes/main", "$buildDir/resources/main", pathingJar.archivePath)
+        }
+    }
+} else {
+    bootRun {
+    }
+}
+
+test {
+    include '**/*UnitTest*'
+    include '**/*IntTest*'
+
+    ignoreFailures true
+    reports.html.enabled = false
+}
+
+task testReport(type: TestReport) {
+    destinationDir = file("$buildDir/reports/tests")
+    reportOn test
+}
+
+apply from: 'gradle/sonar.gradle'
+
+apply from: 'gradle/mapstruct.gradle'
+apply from: 'gradle/docker.gradle'
+//jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
+
+if (project.hasProperty('prod')) {
+    apply from: 'gradle/profile_prod.gradle'
+} else {
+    apply from: 'gradle/profile_dev.gradle'
+}
+
+if (project.hasProperty('graphite')) {
+    apply from: 'gradle/graphite.gradle'
+}
+
+if (project.hasProperty('prometheus')) {
+    apply from: 'gradle/prometheus.gradle'
+}
+
+if (project.hasProperty('shell')) {
+    dependencies {
+        compile "org.springframework.boot:spring-boot-starter-remote-shell"
+    }
+}
+
+group = 'org.theflies'
+version = '0.0.1-SNAPSHOT'
+
+description = ''
+
+configurations {
+    providedRuntime
+    compile.exclude module: "spring-boot-starter-tomcat"
+}
 
 repositories {
+    mavenLocal()
+    mavenCentral()
     jcenter()
-    maven { url 'https://repo.spring.io/libs-milestone' }
+    maven { url 'http://repo.spring.io/milestone' }
+    maven { url 'http://repo.spring.io/snapshot' }
+    maven { url 'https://repository.jboss.org/nexus/content/repositories/releases' }
+    maven { url 'https://oss.sonatype.org/content/repositories/releases' }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url 'http://repo.maven.apache.org/maven2' }
 }
 
 dependencyManagement {
@@ -28,5 +165,112 @@ dependencyManagement {
 }
 
 dependencies {
-    compile 'org.springframework.cloud:spring-cloud-starter-eureka-server'
+    compile "io.github.jhipster:jhipster:${jhipsterServerVersion}"
+    compile "io.dropwizard.metrics:metrics-core:${dropwizardMetricsVersion}"
+    compile "io.dropwizard.metrics:metrics-annotation:${dropwizardMetricsVersion}"
+    compile "io.dropwizard.metrics:metrics-json:${dropwizardMetricsVersion}"
+    compile "io.dropwizard.metrics:metrics-jvm:${dropwizardMetricsVersion}"
+    compile "io.dropwizard.metrics:metrics-servlet:${dropwizardMetricsVersion}"
+    compile "io.dropwizard.metrics:metrics-servlets:${dropwizardMetricsVersion}"
+
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-json-org"
+
+    compile "com.ryantenney.metrics:metrics-spring:${metricsSpringVersion}"
+    compile "commons-codec:commons-codec:${commonsCodecVersion}"
+    compile "commons-io:commons-io:${commonsIoVersion}"
+    compile "org.apache.commons:commons-lang3:${commonsLangVersion}"
+    compile "net.jpountz.lz4:lz4:${lz4Version}"
+
+    compile "org.mapstruct:mapstruct-jdk8:${mapstructVersion}"
+
+    // SPRING
+    compile "org.springframework:spring-context-support"
+    compile "org.springframework.boot:spring-boot-actuator"
+    compile "org.springframework.boot:spring-boot-autoconfigure"
+    optional ("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}") {
+        exclude group: 'com.vaadin.external.google', module: 'android-json'
+    }
+    compile "org.springframework.boot:spring-boot-loader-tools"
+    compile "org.springframework.boot:spring-boot-starter-aop"
+    compile "org.springframework.boot:spring-boot-starter-logging"
+    compile "org.springframework.boot:spring-boot-starter-mail"
+    compile "org.springframework.boot:spring-boot-starter-security"
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
+    compile ("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: 'spring-boot-starter-tomcat'
+    }
+    compile "org.springframework.boot:spring-boot-starter-cloud-connectors"
+
+    // SPRING CLOUD
+    compile "org.springframework.cloud:spring-cloud-starter-zuul"
+    compile "org.springframework.cloud:spring-cloud-starter"
+    compile ("org.springframework.cloud:spring-cloud-starter-ribbon") {
+        exclude module: 'netty-transport-native-epoll'
+    }
+    compile "org.springframework.cloud:spring-cloud-starter-hystrix"
+    compile "org.springframework.cloud:spring-cloud-starter-spectator"
+    compile "org.springframework.cloud:spring-cloud-starter-eureka-server"
+    compile "org.springframework.cloud:spring-cloud-starter-config"
+    compile "org.springframework.cloud:spring-cloud-config-server"
+    compile "org.springframework.cloud:spring-cloud-starter-feign"
+
+    compile "org.springframework.retry:spring-retry"
+
+    compile ("net.logstash.logback:logstash-logback-encoder:${logstashLogbackEncoderVersion}") {
+        exclude(group: 'ch.qos.logback')
+    }
+
+    // security
+    compile "org.springframework.security:spring-security-data"
+
+    compile "org.springframework.boot:spring-boot-starter-undertow"
+
+    compile ("io.springfox:springfox-swagger2:${springfoxVersion}") {
+        exclude module: 'mapstruct'
+    }
+    compile "io.springfox:springfox-bean-validators:${springfoxVersion}"
+    compile "io.jsonwebtoken:jjwt:${jjwtVersion}"
+
+    testCompile "com.h2database:h2"
+    testCompile "org.awaitility:awaitility:${awaitilityVersion}"
+    testCompile "com.jayway.jsonpath:json-path"
+
+    testCompile ("org.springframework.boot:spring-boot-starter-test") {
+        exclude group: 'com.vaadin.external.google', module: 'android-json'
+    }
+    testCompile "org.springframework.security:spring-security-test"
+    testCompile "org.springframework.boot:spring-boot-test"
+    testCompile "org.assertj:assertj-core:${assertjVersion}"
+    testCompile "junit:junit"
+    //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
+
+clean {
+    delete "target"
+}
+
+task cleanResources(type: Delete) {
+    delete 'build/resources'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.0'
+}
+
+task stage(dependsOn: 'bootJar') {
+}
+
+if (project.hasProperty('nodeInstall')) {
+    node {
+        version = "${nodeVersion}"
+        npmVersion = "${npmVersion}"
+        yarnVersion = "${yarnVersion}"
+        download = true
+    }
+}
+
+compileJava.dependsOn processResources
+processResources.dependsOn cleanResources,bootBuildInfo
+bootBuildInfo.mustRunAfter cleanResources
