@@ -1,6 +1,5 @@
 package org.theflies.discovery;
 
-import io.github.jhipster.config.JHipsterConstants;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
@@ -22,6 +21,7 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 import org.theflies.discovery.config.DefaultProfileUtil;
+import org.theflies.discovery.config.TheFliesConstants;
 import org.theflies.discovery.config.TheFliesProperties;
 
 /**
@@ -54,13 +54,13 @@ public class TheFliesRegistry {
   @PostConstruct
   public void initApplication() {
     Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
-    if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles
-        .contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
+    if (activeProfiles.contains(TheFliesConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles
+        .contains(TheFliesConstants.SPRING_PROFILE_PRODUCTION)) {
       log.error("You have misconfigured your application! It should not run " +
           "with both the 'dev' and 'prod' profiles at the same time.");
     }
-    if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles
-        .contains(JHipsterConstants.SPRING_PROFILE_CLOUD)) {
+    if (activeProfiles.contains(TheFliesConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles
+        .contains(TheFliesConstants.SPRING_PROFILE_CLOUD)) {
       log.error("You have misconfigured your application! It should not" +
           "run with both the 'dev' and 'cloud' profiles at the same time.");
     }
@@ -93,18 +93,18 @@ public class TheFliesRegistry {
         env.getProperty("server.port"),
         env.getActiveProfiles());
 
-    String secretKey = env.getProperty("jhipster.security.authentication.jwt.secret");
+    String secretKey = env.getProperty("theflies.security.authentication.jwt.secret");
     if (secretKey == null) {
       log.error("\n----------------------------------------------------------\n" +
           "Your JWT secret key is not set up, you will not be able to log into the JHipster.\n" +
-          "Please read the documentation at https://jhipster.github.io/jhipster-registry/\n" +
+          "Please read the documentation at https://theflies.github.io/theflies-registry/\n" +
           "----------------------------------------------------------");
     } else if (secretKey.equals("this-secret-should-not-be-used-read-the-comment")) {
       log.error("\n----------------------------------------------------------\n" +
           "Your JWT secret key is not configured using Spring Cloud Config, you will not be able to \n"
           +
           "use the JHipster Registry dashboards to monitor external applications. \n" +
-          "Please read the documentation at https://jhipster.github.io/jhipster-registry/\n" +
+          "Please read the documentation at https://theflies.github.io/theflies-registry/\n" +
           "----------------------------------------------------------");
     }
   }
