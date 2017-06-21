@@ -22,7 +22,7 @@
       </appender>
   -->
 
-  <logger name="org.theflies.discovery" level="#logback.loglevel#"/>
+  <logger name="org.theflies.registry" level="#logback.loglevel#"/>
 
   <logger name="org.theflies" level="DEBUG"/>
 
