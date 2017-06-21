@@ -23,7 +23,7 @@ spring:
         favicon:
             enabled: false
     thymeleaf:
-        mode: XHTML
+        mode: HTML
 
 server:
     port: 9761

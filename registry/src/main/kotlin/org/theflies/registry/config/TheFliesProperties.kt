@@ -61,8 +61,7 @@ class TheFliesProperties {
     var version = Version.V_1_1
 
     class Cache {
-
-      var timeToLiveInDays = 1461
+      var timeToLiveInDays = 1461L
     }
   }
 
