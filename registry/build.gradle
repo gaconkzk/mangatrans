@@ -1,4 +1,3 @@
-import groovy.json.JsonSlurper
 import org.gradle.internal.os.OperatingSystem
 
 buildscript {
@@ -55,6 +54,7 @@ apply plugin: 'kotlin'
 apply plugin: 'kotlin-spring'
 apply plugin: 'java'
 sourceCompatibility=1.8
+
 targetCompatibility=1.8
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
@@ -71,42 +71,42 @@ apply plugin: 'io.spring.dependency-management'
 ext['hibernate.version'] = '${hibernate_entitymanager_version}'
 defaultTasks 'bootRun'
 
-bootJar {
-    mainClass = "org.theflies.registry.Application"
-}
-
-war {
-
-}
-
+//bootRun {
+//    mainClass = "org.theflies.registry.TheFliesKt"
+//}
+//
+//war {
+//
+//}
+//
 springBoot {
     buildInfo()
 }
-
-if (OperatingSystem.current().isWindows()) {
-    task pathingJar(type: Jar) {
-        dependsOn configurations.runtime
-        appendix = 'pathing'
-
-        doFirst {
-            manifest {
-                attributes 'Class-Path': configurations.runtime.files.collect {
-                    it.toURL().toString().replaceFirst(/file:\/+/, '/').replaceAll(' ', '%20')
-                }.join(' ')
-            }
-        }
-    }
-
-    bootRun {
-        dependsOn pathingJar
-        doFirst {
-            classpath = files("$buildDir/classes/main", "$buildDir/resources/main", pathingJar.archivePath)
-        }
-    }
-} else {
-    bootRun {
-    }
-}
+//
+//if (OperatingSystem.current().isWindows()) {
+//    task pathingJar(type: Jar) {
+//        dependsOn configurations.runtime
+//        appendix = 'pathing'
+//
+//        doFirst {
+//            manifest {
+//                attributes 'Class-Path': configurations.runtime.files.collect {
+//                    it.toURL().toString().replaceFirst(/file:\/+/, '/').replaceAll(' ', '%20')
+//                }.join(' ')
+//            }
+//        }
+//    }
+//
+//    bootRun {
+//        dependsOn pathingJar
+//        doFirst {
+//            classpath = files("$buildDir/classes/main", "$buildDir/resources/main", pathingJar.archivePath)
+//        }
+//    }
+//} else {
+//    bootRun {
+//    }
+//}
 
 test {
     include '**/*UnitTest*'

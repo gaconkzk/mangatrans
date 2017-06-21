@@ -39,9 +39,6 @@ object DefaultProfileUtil {
    */
   fun getActiveProfiles(env: Environment): Array<String> {
     val profiles = env.activeProfiles
-    if (profiles.isEmpty()) {
-      return env.defaultProfiles
-    }
-    return profiles
+    return if (profiles.isEmpty()) env.defaultProfiles else profiles
   }
 }
