@@ -1,55 +1,34 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="keywords" content="palavras,chaves,separadas,por,vírgula,sem,espaço">
-  <meta name="author" content="best site"/>
-  <meta name="description" content="A page's description, usually one or two sentences."/>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <!-- Social Media Meta Card Tags -->
-  <!-- Open Graph -->
-  <meta property="og:site_name" content="The best site">
-  <meta property="og:url" content="https://bestsite.com">
-  <meta property="og:title" content="The best site"/>
-  <meta property="og:description" content="description goes here"/>
-  <!-- Multiplas imagens com multiplas resoluções/tipos podem ser usadas -->
-  <meta property="og:image" content="https://bestsite.com/logo.png"/>
-  <meta property="og:image:type" content="image/png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="1200">
-  <!-- Twitter cards -->
-  <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:site" content="bestsite"/>
-  <meta property="twitter:site:id" content="7812312"/>
-  <meta property="twitter:title" content="The best site"/>
-  <meta property="twitter:description" content="description goes here"/>
-  <meta property="twitter:image" content="link_to_image"/>
-  <meta property="twitter:image:src" content="https://bestsite.com/logo.png">
-  <meta property="twitter:image:width" content="1200">
-  <meta property="twitter:image:height" content="1200">
-  <!-- Google+ -->
-  <meta itemprop="name" content="The best site">
-  <meta itemprop="description" content="description goes here">
-  <meta itemprop="image" content="https://bestsite.com/logo.png">
-  <!-- Tags that are not meta -->
-  <title>The Flies Registry</title>
-  <!-- CSS -->
-  <!-- CSS Reset Files must be called before any other file -->
-  <!-- <link rel="stylesheet" type="text/css" href="/css/reset.min.css"> -->
-  <!-- <link rel="stylesheet" type="text/css" href="/css/bundle.css"> -->
-  <!-- Analytics scripts can be placed in head, being minified and uglyfied -->
-  <!-- <script async src="//www.google-analytics.com/analytics.min.js"></script> -->
-</head>
-<body>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>theflies-registry</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/img/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/img/icons/favicon-16x16.png">
+    <!--[if IE]><link rel="shortcut icon" href="/static/img/icons/favicon.ico"><![endif]-->
+    <!-- Add to home screen for Android and modern mobile browsers -->
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#4DBA87">
 
-<!-- Body content -->
-<!-- Preferably, only a tag containing the root of the application should be called -->
-<div id="app"></div>
-
-<!-- JavaScript -->
-<!-- Place the bundle.js below so that the page loads regardless of JavaScript -->
-<!-- There may be scenarios where bundle.js should be imported into the head tag. -->
-<!-- <script async charset="utf-8" src="/js/bundle.js"></script> -->
-</body>
+    <!-- Add to home screen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="theflies-registry">
+    <link rel="apple-touch-icon" href="/static/img/icons/apple-touch-icon-152x152.png">
+    <!-- Add to home screen for Windows -->
+    <meta name="msapplication-TileImage" content="/static/img/icons/msapplication-icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#000000">
+    <% for (var chunk of webpack.chunks) {
+        for (var file of chunk.files) {
+          if (file.match(/\.(js|css)$/)) { %>
+    <link rel="<%= chunk.initial?'preload':'prefetch' %>" href="<%= htmlWebpackPlugin.files.publicPath + file %>" as="<%= file.match(/\.css$/)?'style':'script' %>"><% }}} %>
+  </head>
+  <body>
+    <div id="app">This is your fallback content in case JavaScript fails to load.</div>
+    <!-- Todo: only include in production -->
+    <%= htmlWebpackPlugin.options.serviceWorkerLoader %>
+    <!-- built files will be auto injected -->
+  </body>
 </html>
