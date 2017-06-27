@@ -17,8 +17,8 @@
         <br>
         <br> The address info:
         <pre>
-  {{ addressInfo }}
-        </pre>
+    {{ addressInfo }}
+          </pre>
       </div>
     </div>
     <br>
@@ -36,35 +36,35 @@
             <strong>Heads up!</strong> Use the search in the navbar and watch the changes in the code block below:
           </div>
           <pre class="text-muted">
-    {{ $store.state.appnav }}
-          </pre>
+      {{ $store.state.appnav }}
+            </pre>
           <p>
             <strong>Using Computed Properties</strong>
             <br> You can use a stored property in your own computed property to reactively update a value:
             <pre class="text-muted">
-        computed: {
-          reversedSearchText: function () {
-            return this.$store.state.appnav.searchText.split('').reverse().join('')
+          computed: {
+            reversedSearchText: function () {
+              return this.$store.state.appnav.searchText.split('').reverse().join('')
+            }
           }
-        }
-      </pre> The reversed value of the search text is:
+        </pre> The reversed value of the search text is:
             <code>{{ reversedSearchText }}</code>
           </p>
           <p>
             <strong>Use a Vuex watcher</strong>
             <br> Put a watcher on a Vuex property to attach behavior and side-effects to state changes:
             <pre class="text-muted">
-        mounted () {
-          this.$store.watch((state) => {
-            return state.appnav
-          }, (appnav) => {
-            // Add some behavior here
-            alert('Now you need to make a component to display search results!')
-          }, {
-            deep: true
-          })
-        }
-      </pre> When you perform a search from the navbar above, an alert box should show.
+          mounted () {
+            this.$store.watch((state) => {
+              return state.appnav
+            }, (appnav) => {
+              // Add some behavior here
+              alert('Now you need to make a component to display search results!')
+            }, {
+              deep: true
+            })
+          }
+        </pre> When you perform a search from the navbar above, an alert box should show.
           </p>
         </p>
       </div>
