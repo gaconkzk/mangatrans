@@ -6,17 +6,22 @@
       </md-card-media>
   
       <md-card-content>
+        <p>username:
+          <strong>demouser</strong>
+          <br> password:
+          <strong>testpass</strong>
+        </p>
         <md-input-container :class="{'md-input-invalid': error?true:false}">
           <label>Username</label>
           <md-input type="text" id="login.username" v-model="credentials.username"></md-input>
-          <span class="md-error">{{error}}</span>
         </md-input-container>
   
         <md-input-container>
           <label>Password</label>
           <md-input type="password" v-model="credentials.password"></md-input>
         </md-input-container>
-  
+
+        <span class="md-error">{{error}}</span>
       </md-card-content>
   
       <md-card-actions>
@@ -57,7 +62,9 @@
 </template>
 
 <script>
+import Auth from '@/auth'
 import Spinner from '@/components/common/Spinner'
+
 export default {
   name: 'login',
   components: { Spinner },
@@ -81,7 +88,7 @@ export default {
       // Auth.login() returns a promise. A redirect will happen on success.
       // For errors, use .then() to capture the response to output
       // error_description (if exists) as shown below:
-      this.$auth.login(credentials, 'dashboard').then((response) => {
+      Auth.login(credentials, 'dashboard').then((response) => {
         this.loggingIn = false
         this.error = utils.getError(response)
       })
@@ -108,6 +115,7 @@ export default {
   justify-content: center;
   img {
     max-width: 200px;
+    max-height: 160px;
   }
 }
 </style>
