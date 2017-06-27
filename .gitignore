@@ -1,5 +1,6 @@
 .gradle
-**/build/
+/registry/build/
+/manga/build
 !gradle/wrapper/gradle-wrapper.jar
 
 ### STS ###
@@ -14,6 +15,7 @@
 .idea
 *.iws
 *.ipr
+*.iml
 
 ### NetBeans ###
 nbproject/private/
