@@ -118,3 +118,5 @@ security:
 # ===================================================================
 
 application:
+
+logging.level.org.springframework.web.reactive: DEBUG

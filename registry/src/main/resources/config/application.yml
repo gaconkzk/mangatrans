@@ -24,6 +24,10 @@ spring:
             enabled: false
     thymeleaf:
         mode: HTML
+        checkTemplate: false
+        reactive:
+          maxChunkSize: 8192
+          mediaType: text/html,text/event-stream
 
 server:
     port: 9761
@@ -35,7 +39,6 @@ ribbon:
 zuul:
     prefix: /services/ #slash before and after
     strip-prefix: true
-    ignoredPatterns: /**
 
 management:
     security:

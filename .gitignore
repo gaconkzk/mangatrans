@@ -1,5 +1,6 @@
 .gradle
 /registry/build/
+/registry/out/
 /manga/build
 !gradle/wrapper/gradle-wrapper.jar
 
