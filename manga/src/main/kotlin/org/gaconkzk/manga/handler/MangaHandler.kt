@@ -13,14 +13,14 @@ import org.springframework.web.reactive.function.server.body
  */
 @Component
 class MangaHandler(val mangarepo: MangaRepository, val minioclient: MinioClient) {
-    fun all(req: ServerRequest) = ok().disableCors().body(mangarepo
-            .findAll().map { it.copy(url = setUrl(it.name, 0)) })
+  fun all(req: ServerRequest) = ok().disableCors().body(mangarepo
+      .findAll().map { it.copy(url = setUrl(it.name, 0)) })
 
-    private fun setUrl(mangaName: String, page: Int): String? =
-            try {
-            minioclient
-                    .presignedGetObject(mangaName, "v01/" + String.format("%03d", page) + ".jpg", 60 * 60 * 24)
-            } catch (e: Exception) {
-                null
-            }
+  private fun setUrl(mangaName: String, page: Int): String? =
+      try {
+        minioclient
+            .presignedGetObject(mangaName, "v01/" + String.format("%03d", page) + ".jpg", 60 * 60 * 24)
+      } catch (e: Exception) {
+        null
+      }
 }

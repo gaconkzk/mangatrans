@@ -53,8 +53,8 @@ class SecurityConfiguration(private val authenticationEntryPoint: Http401Unautho
         .and()
         .authorizeRequests()
         .antMatchers("/**").permitAll() // cannot reconnect without this line
-        .antMatchers("/api/**").authenticated()
         .antMatchers("/api/authenticate").permitAll()
+        .antMatchers("/api/**").authenticated()
         .antMatchers("/eureka/**").hasAuthority(AuthoritiesConstants.ADMIN)
         .antMatchers("/config/**").hasAuthority(AuthoritiesConstants.ADMIN)
         .antMatchers("/management/health").permitAll()
