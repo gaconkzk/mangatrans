@@ -1,9 +1,80 @@
 /* Font Awesome */
 
 $fa-font-path: '../../../node_modules/font-awesome/fonts';
-@import '../../../node_modules/font-awesome/scss/font-awesome';
+// @import '../../../node_modules/font-awesome/scss/font-awesome';
 
 /* Roboto */
 
-$roboto-font-path: '../../../node_modules/roboto-fontface/fonts';
-@import '../../../node_modules/roboto-fontface/css/roboto/sass/roboto-fontface';
+$roboto-font-path: '../../../node_modules/roboto-fontface/fonts/Roboto';
+// @import '../../../node_modules/roboto-fontface/css/roboto/sass/roboto-fontface';
+
+
+// =============================================================================
+// String Replace
+// =============================================================================
+@function str-replace($string, $search, $replace: "") {
+	$index: str-index($string, $search);
+
+	@if $index {
+		@return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+	}
+
+	@return $string;
+}
+
+// =============================================================================
+// Font Face
+// =============================================================================
+@mixin font-face($name, $path, $weight: null, $style: null, 
+                 $exts: eot woff2 woff ttf svg, $unirange: null) {
+	$src: null;
+
+	$extmods: (
+		eot: "?",
+		svg: "#" + str-replace($name, " ", "_")
+	);
+
+	$formats: (
+		otf: "opentype",
+		ttf: "truetype"
+	);
+
+	@each $ext in $exts {
+		$extmod: if(map-has-key($extmods, $ext), $ext + map-get($extmods, $ext), $ext);
+		$format: if(map-has-key($formats, $ext), map-get($formats, $ext), $ext);
+		$src: append($src, url(quote($path + "." + $extmod)) format(quote($format)), comma);
+	}
+
+	@font-face {
+		font-family: quote($name);
+		font-style: $style;
+		font-weight: $weight;
+		src: $src;
+    @if $unirange {
+      unicode-range: $unirange;
+    }
+	}
+}
+
+$charset: ((U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F)
+          (U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116)
+          (U+1F00-1FFF)
+          (U+0370-03FF)
+          (U+0102-0103, U+1EA0-1EF9, U+20AB)
+          (U+0100-024F, U+1E00-1EFF, U+20A0-20AB, U+20AD-20CF, U+2C60-2C7F, U+A720-A7FF)
+          (U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000));
+
+$font-name: $roboto-font-path+"/Roboto-Light" 300,
+            $roboto-font-path+"/Roboto-Regular" 400,
+            $roboto-font-path+"/Roboto-Medium" 500,
+            $roboto-font-path+"/Roboto-Bold" 700,
+            $roboto-font-path+"/Roboto-LightItalic" 400;
+
+
+@each $fn in $font-name {
+  @each $cs in $charset {
+    @include font-face("Roboto", nth($fn,1), 
+                   nth($fn,2), 'normal', 'woff2', 
+                   $cs);
+  }
+}
