@@ -4,9 +4,6 @@ import javax.validation.constraints.NotNull
 import javax.validation.constraints.Size
 
 /**
- *
- */
-/**
  * View Model object for representing a user's credentials
  */
 data class LoginVM(

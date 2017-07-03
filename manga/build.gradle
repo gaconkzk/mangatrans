@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        kotlinVersion = '1.1.2-5'
+        kotlinVersion = '1.1.3'
         springBootVersion = '2.0.0.M2'
         kotlinExtensionsVersion = '1.0.0.M2'
         minioVersion = '3.0.4'
@@ -60,7 +60,7 @@ dependencies {
 
     compile("io.projectreactor:reactor-kotlin-extensions:${kotlinExtensionsVersion}")
 
-//    runtime("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
+    runtime("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }

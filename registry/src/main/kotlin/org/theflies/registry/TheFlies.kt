@@ -14,6 +14,7 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.core.env.Environment
+import org.springframework.web.reactive.config.EnableWebFlux
 import org.theflies.registry.config.DefaultProfileUtil
 import org.theflies.registry.config.TheFliesConstants
 import org.theflies.registry.config.TheFliesProperties
@@ -26,6 +27,7 @@ import javax.annotation.PostConstruct
 @SpringBootApplication
 @EnableEurekaServer
 @EnableConfigServer
+@EnableWebFlux
 @ComponentScan
 @EnableAutoConfiguration(exclude = arrayOf(
     MetricFilterAutoConfiguration::class,

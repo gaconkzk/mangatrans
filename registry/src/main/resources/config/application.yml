@@ -39,6 +39,7 @@ ribbon:
 zuul:
     prefix: /services/ #slash before and after
     strip-prefix: true
+#    ignoredPatterns: /api/**
 
 management:
     security:
