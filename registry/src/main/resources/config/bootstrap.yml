@@ -14,10 +14,9 @@ spring:
                 git:
                     uri: https://github.com/gaconkzk/theflies-registry-config
                 native:
-                    searchLocations: file:./central-config
+                    search-locations: file:./central-config
                 prefix: /config
                 bootstrap: true
-                enabled: true
             failFast: true
             # name of the config server's property source (file.yml) that we want to use
             name: theflies-registry

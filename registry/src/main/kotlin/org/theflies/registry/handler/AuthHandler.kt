@@ -1,7 +1,7 @@
 package org.theflies.registry.handler
 
 import org.springframework.http.HttpStatus
-import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.BodyExtractors.toMono
@@ -21,7 +21,7 @@ import reactor.core.publisher.Mono
  *
  */
 @Component
-class AuthHandler(val tokenProvider: TokenProvider, val auth: AuthenticationManager) {
+class AuthHandler(val tokenProvider: TokenProvider, val auth: ReactiveAuthenticationManager) {
   fun authorize(req: ServerRequest): Mono<ServerResponse> {
 
     var rememberMe:Boolean = false
@@ -30,7 +30,7 @@ class AuthHandler(val tokenProvider: TokenProvider, val auth: AuthenticationMana
       rememberMe = it.isRememberMe?:false
       UsernamePasswordAuthenticationToken(it.username, it.password)
     }.map {
-      auth.authenticate(it)
+      auth.authenticate(it).block() // :( old style
     }.map {
       tokenProvider.createToken(it, rememberMe)
     }.map {
