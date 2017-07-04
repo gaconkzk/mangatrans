@@ -252,6 +252,7 @@ dependencies {
 
   // security
   compile "org.springframework.security:spring-security-data"
+  compile "org.springframework.security:spring-security-webflux"
 
   compile "org.springframework.boot:spring-boot-starter-undertow"
 
@@ -275,6 +276,8 @@ dependencies {
   testCompile "org.assertj:assertj-core:${assertjVersion}"
   testCompile "junit:junit"
   //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+
+  compileOnly("org.projectlombok:lombok:1.16.18")
 }
 
 clean {

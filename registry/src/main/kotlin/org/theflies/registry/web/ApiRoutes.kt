@@ -10,9 +10,9 @@ import org.theflies.registry.handler.AuthHandler
  *
  */
 @Configuration
-class ApiRoutes(val authHandler: AuthHandler) {
+class ApiRoutes {
   @Bean
-  fun apiRouter() = router {
+  fun apiRouter(authHandler: AuthHandler) = router {
     (accept(APPLICATION_JSON) and "/api").nest {
       "/authenticate".nest {
         POST("/", authHandler::authorize)

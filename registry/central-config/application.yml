@@ -13,3 +13,5 @@ theflies:
         authentication:
             jwt:
                 secret: my-secret-token-to-change-in-production
+
+logging.level.org.springframework.web: DEBUG

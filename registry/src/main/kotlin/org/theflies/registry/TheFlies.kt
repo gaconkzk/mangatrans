@@ -2,6 +2,7 @@ package org.theflies.registry
 
 import org.slf4j.LoggerFactory
 import org.springframework.boot.SpringApplication
+import org.springframework.boot.WebApplicationType
 import org.springframework.boot.actuate.autoconfigure.MetricFilterAutoConfiguration
 import org.springframework.boot.actuate.autoconfigure.MetricRepositoryAutoConfiguration
 import org.springframework.boot.actuate.autoconfigure.MetricsDropwizardAutoConfiguration
@@ -14,12 +15,12 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.core.env.Environment
-import org.springframework.web.reactive.config.EnableWebFlux
 import org.theflies.registry.config.DefaultProfileUtil
 import org.theflies.registry.config.TheFliesConstants
 import org.theflies.registry.config.TheFliesProperties
 import java.net.InetAddress
 import javax.annotation.PostConstruct
+
 
 /**
  *
@@ -27,7 +28,6 @@ import javax.annotation.PostConstruct
 @SpringBootApplication
 @EnableEurekaServer
 @EnableConfigServer
-@EnableWebFlux
 @ComponentScan
 @EnableAutoConfiguration(exclude = arrayOf(
     MetricFilterAutoConfiguration::class,
@@ -38,8 +38,17 @@ import javax.annotation.PostConstruct
 @EnableDiscoveryClient
 @EnableZuulProxy
 class TheFlies(val env: Environment) {
-
-  val log = LoggerFactory.getLogger(TheFlies::class.java);
+  val log = LoggerFactory.getLogger(TheFlies::class.java)
+//
+//  @Value("\${server.port:8080}")
+//  private val port = 8080
+//
+//  @Bean
+//  fun nettyContext(handler: HttpHandler): NettyContext {
+//    val adapter = ReactorHttpHandlerAdapter(handler)
+//    val httpServer = HttpServer.create("localhost", port)
+//    return httpServer.newHandler(adapter).block()
+//  }
 
   @PostConstruct
   fun initApplication() {
@@ -59,6 +68,9 @@ fun main(args: Array<String>) {
   val log = LoggerFactory.getLogger(TheFlies::class.java);
 
   val app = SpringApplication(TheFlies::class.java)
+  // Running this web application in Reactive mode
+  app.webApplicationType = WebApplicationType.REACTIVE
+
   DefaultProfileUtil.addDefaultProfile(app)
   val env = app.run(*args).environment
   var protocol = "http"

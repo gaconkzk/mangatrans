@@ -2,17 +2,16 @@ package org.theflies.registry.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.web.reactive.config.ViewResolverRegistry
+import org.springframework.web.reactive.config.WebFluxConfigurer
+import org.springframework.web.reactive.result.view.ViewResolver
+import org.springframework.web.reactive.result.view.script.ScriptTemplateConfigurer
+import org.springframework.web.reactive.result.view.script.ScriptTemplateViewResolver
 import org.springframework.web.servlet.LocaleResolver
-import org.springframework.web.servlet.ViewResolver
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
-import org.springframework.web.servlet.i18n.LocaleChangeInterceptor
-import org.springframework.web.servlet.view.script.ScriptTemplateConfigurer
-import org.springframework.web.servlet.view.script.ScriptTemplateViewResolver
 import org.theflies.registry.config.locale.VueCookieLocaleResolver
 
 @Configuration
-class ViewAndLocaleConfiguration : WebMvcConfigurer {
+class ViewAndLocaleConfiguration : WebFluxConfigurer {
 
   @Bean
   fun kotlinScriptConfigurer(): ScriptTemplateConfigurer {
@@ -38,10 +37,14 @@ class ViewAndLocaleConfiguration : WebMvcConfigurer {
     cookieLocaleResolver.setCookieName("NG_TRANSLATE_LANG_KEY")
     return cookieLocaleResolver
   }
+//
+//  fun addInterceptors(registry: InterceptorRegistry?) {
+//    val lci = LocaleChangeInterceptor()
+//    lci.paramName = "language"
+//    registry!!.addInterceptor(lci)
+//  }
 
-  override fun addInterceptors(registry: InterceptorRegistry?) {
-    val lci = LocaleChangeInterceptor()
-    lci.paramName = "language"
-    registry!!.addInterceptor(lci)
+  override fun configureViewResolvers(registry: ViewResolverRegistry?) {
+    registry?.viewResolver(kotlinScriptViewResolver())
   }
 }
