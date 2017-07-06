@@ -2,9 +2,11 @@ package org.theflies.registry.util
 
 import org.springframework.boot.SpringApplication
 import org.springframework.context.ApplicationContext
+import org.springframework.http.MediaType.APPLICATION_JSON_UTF8
 import org.springframework.web.reactive.function.server.ServerResponse
 import kotlin.reflect.KClass
-import org.springframework.http.MediaType.*
+
+private val SPRING_PROFILE_DEFAULT = "spring.profiles.default"
 
 /**
  *
@@ -12,6 +14,13 @@ import org.springframework.http.MediaType.*
 // ------------
 // Spring Boot extensions
 // ------------
+fun SpringApplication.addDefaultProfile(vararg profiles: String) {
+  if (profiles.joinToString().isNotEmpty()) {
+    setDefaultProperties(kotlin.collections.mapOf(SPRING_PROFILE_DEFAULT to profiles
+        .joinToString()))
+  }
+}
+
 fun run(type: KClass<*>, vararg args: String): ApplicationContext =
     SpringApplication.run(type.java, *args)
 

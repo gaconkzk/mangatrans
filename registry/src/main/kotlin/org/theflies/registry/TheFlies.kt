@@ -15,9 +15,9 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.core.env.Environment
-import org.theflies.registry.config.DefaultProfileUtil
 import org.theflies.registry.config.TheFliesConstants
 import org.theflies.registry.config.TheFliesProperties
+import org.theflies.registry.util.addDefaultProfile
 import java.net.InetAddress
 import javax.annotation.PostConstruct
 
@@ -53,13 +53,15 @@ class TheFlies(val env: Environment) {
   @PostConstruct
   fun initApplication() {
     val activeProfiles = env.activeProfiles
-    if (activeProfiles.contains(TheFliesConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles
-        .contains(TheFliesConstants.SPRING_PROFILE_PRODUCTION)) {
-      log.error("You have misconfigured your application! It should not run " + "with both the 'dev' and 'prod' profiles at the same time.")
-    }
-    if (activeProfiles.contains(TheFliesConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles
-        .contains(TheFliesConstants.SPRING_PROFILE_CLOUD)) {
-      log.error("You have misconfigured your application! It should not" + "run with both the 'dev' and 'cloud' profiles at the same time.")
+    when {
+      activeProfiles.contains(TheFliesConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles
+          .contains(TheFliesConstants.SPRING_PROFILE_PRODUCTION) ->
+        log.error("You have misconfigured your application! It should not run "
+            + "with both the 'dev' and 'prod' profiles at the same time.")
+      activeProfiles.contains(TheFliesConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles
+          .contains(TheFliesConstants.SPRING_PROFILE_CLOUD) ->
+        log.error("You have misconfigured your application! It should not"
+            + "run with both the 'dev' and 'cloud' profiles at the same time.")
     }
   }
 }
@@ -70,38 +72,36 @@ fun main(args: Array<String>) {
   val app = SpringApplication(TheFlies::class.java)
   // Running this web application in Reactive mode
   app.webApplicationType = WebApplicationType.REACTIVE
+  app.addDefaultProfile()
 
-  DefaultProfileUtil.addDefaultProfile(app)
   val env = app.run(*args).environment
-  var protocol = "http"
-  if (env.getProperty("server.ssl.key-store") != null) {
-    protocol = "https"
-  }
-  log.info("\n----------------------------------------------------------\n\t" +
-      "Application '{}' is running! Access URLs:\n\t" +
-      "Local: \t\t{}://localhost:{}\n\t" +
-      "External: \t{}://{}:{}\n\t" +
-      "Profile(s): \t{}\n----------------------------------------------------------",
-      env.getProperty("spring.application.name"),
-      protocol,
-      env.getProperty("server.port"),
-      protocol,
-      InetAddress.getLocalHost().hostAddress,
-      env.getProperty("server.port"),
-      env.activeProfiles)
+  val protocol =
+      if (env.getProperty("server.ssl.key-store") != null) {
+        "https"
+      } else {
+        "http"
+      }
 
-  val secretKey = env.getProperty("theflies.security.authentication.jwt.secret")
-  if (secretKey == null) {
-    log.error("\n----------------------------------------------------------\n" +
-        "Your JWT secret key is not set up, you will not be able to log into the JHipster.\n" +
-        "Please read the documentation at https://theflies.github.io/theflies-registry/\n" +
-        "----------------------------------------------------------")
-  } else if (secretKey == "this-secret-should-not-be-used-read-the-comment") {
-    log.error("\n----------------------------------------------------------\n" +
-        "Your JWT secret key is not configured using Spring Cloud Config, you will not be able to \n"
-        +
-        "use the JHipster Registry dashboards to monitor external applications. \n" +
-        "Please read the documentation at https://theflies.github.io/theflies-registry/\n" +
-        "----------------------------------------------------------")
+  log.info(
+      "\n----------------------------------------------------------\n\t" +
+          "Application '${env.getProperty("spring.application.name")}' is running! Access URLs:\n\t" +
+          "Local: \t\t$protocol://localhost:${env.getProperty("server.port")}\n\t" +
+          "External: \t$protocol://${InetAddress.getLocalHost().hostAddress}:${env.getProperty("server.port")}\n\t" +
+          "Profile(s): \t${env.activeProfiles.joinToString()}" +
+          "\n----------------------------------------------------------")
+
+  when (env.getProperty("theflies.security.authentication.jwt.secret")) {
+    null ->
+      log.error("\n----------------------------------------------------------\n" +
+          "Your JWT secret key is not set up, you will not be able to log into the JHipster.\n" +
+          "Please read the documentation at https://theflies.github.io/theflies-registry/\n" +
+          "----------------------------------------------------------")
+    "this-secret-should-not-be-used-read-the-comment" ->
+      log.error("\n----------------------------------------------------------\n" +
+          "Your JWT secret key is not configured using Spring Cloud Config, you will not be able to \n"
+          +
+          "use the JHipster Registry dashboards to monitor external applications. \n" +
+          "Please read the documentation at https://theflies.github.io/theflies-registry/\n" +
+          "----------------------------------------------------------")
   }
 }
