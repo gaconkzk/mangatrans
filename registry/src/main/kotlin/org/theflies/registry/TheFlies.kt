@@ -65,7 +65,7 @@ class TheFlies(val env: Environment) {
 }
 
 fun main(args: Array<String>) {
-  val log = LoggerFactory.getLogger(TheFlies::class.java);
+  val log = LoggerFactory.getLogger(TheFlies::class.java)
 
   val app = SpringApplication(TheFlies::class.java)
   // Running this web application in Reactive mode

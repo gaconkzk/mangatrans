@@ -1,6 +1,6 @@
 buildscript {
   ext {
-    kotlinVersion = '1.1.3'
+    kotlinVersion = '1.1.3-2'
     springBootVersion = '2.0.0.M2'
     springCloudVersion = 'Finchley.BUILD-SNAPSHOT'
     sonarqubeVersion = '2.5'
