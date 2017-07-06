@@ -1,19 +1,18 @@
 package org.theflies.registry
 
 import org.slf4j.LoggerFactory
-import org.springframework.boot.SpringApplication
 import org.springframework.boot.WebApplicationType
 import org.springframework.boot.actuate.autoconfigure.MetricFilterAutoConfiguration
 import org.springframework.boot.actuate.autoconfigure.MetricRepositoryAutoConfiguration
 import org.springframework.boot.actuate.autoconfigure.MetricsDropwizardAutoConfiguration
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient
 import org.springframework.cloud.config.server.EnableConfigServer
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy
-import org.springframework.context.annotation.ComponentScan
 import org.springframework.core.env.Environment
 import org.theflies.registry.config.TheFliesConstants
 import org.theflies.registry.config.TheFliesProperties
@@ -21,6 +20,7 @@ import org.theflies.registry.util.addDefaultProfile
 import java.net.InetAddress
 import javax.annotation.PostConstruct
 
+private val log = LoggerFactory.getLogger(TheFlies::class.java)
 
 /**
  *
@@ -28,7 +28,6 @@ import javax.annotation.PostConstruct
 @SpringBootApplication
 @EnableEurekaServer
 @EnableConfigServer
-@ComponentScan
 @EnableAutoConfiguration(exclude = arrayOf(
     MetricFilterAutoConfiguration::class,
     MetricRepositoryAutoConfiguration::class,
@@ -38,18 +37,6 @@ import javax.annotation.PostConstruct
 @EnableDiscoveryClient
 @EnableZuulProxy
 class TheFlies(val env: Environment) {
-  val log = LoggerFactory.getLogger(TheFlies::class.java)
-//
-//  @Value("\${server.port:8080}")
-//  private val port = 8080
-//
-//  @Bean
-//  fun nettyContext(handler: HttpHandler): NettyContext {
-//    val adapter = ReactorHttpHandlerAdapter(handler)
-//    val httpServer = HttpServer.create("localhost", port)
-//    return httpServer.newHandler(adapter).block()
-//  }
-
   @PostConstruct
   fun initApplication() {
     val activeProfiles = env.activeProfiles
@@ -67,11 +54,9 @@ class TheFlies(val env: Environment) {
 }
 
 fun main(args: Array<String>) {
-  val log = LoggerFactory.getLogger(TheFlies::class.java)
-
-  val app = SpringApplication(TheFlies::class.java)
-  // Running this web application in Reactive mode
-  app.webApplicationType = WebApplicationType.REACTIVE
+  val app = SpringApplicationBuilder(TheFlies::class.java)
+      .web(WebApplicationType.REACTIVE) // Running this web application in Reactive mode
+      .build()
   app.addDefaultProfile()
 
   val env = app.run(*args).environment
